@@ -81,6 +81,11 @@ export default function CoffeePage() {
       </div>
     );
 
+  const qrValue =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/redeem?userId=${user.uid}&shopId=${shopId}`
+      : `/redeem?userId=${user.uid}&shopId=${shopId}`;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white px-4">
       <h1 className="text-2xl font-bold mb-4 text-center">
@@ -95,10 +100,7 @@ export default function CoffeePage() {
 
       {/* QR Code for this user */}
       <div className="bg-white p-4 rounded-xl shadow-lg">
-        <QRCode
-          value={`${window.location.origin}/redeem?userId=${user.uid}&shopId=${shopId}`}
-          size={180}
-        />
+        <QRCode value={qrValue} size={180} />
       </div>
 
       {/* <button

@@ -9,7 +9,10 @@ export default function Dashboard() {
 
   if (!shopId) return <p>No shop found.</p>;
 
-  const qrValue = `${window.location.origin}/scan?shopId=${shopId}`;
+  const qrValue =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/scan?shopId=${shopId}`
+      : `/scan?shopId=${shopId}`;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
