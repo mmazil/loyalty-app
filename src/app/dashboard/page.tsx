@@ -1,9 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import QRCode from "react-qr-code";
 
-export default function Dashboard() {
+// 🚫 Prevent prerendering (fixes Vercel build crash)
+export const dynamic = "force-dynamic";
+
+function DashboardContent() {
   const params = useSearchParams();
   const shopId = params.get("shopId");
 
@@ -21,5 +25,13 @@ export default function Dashboard() {
       <QRCode value={qrValue} size={200} />
       <p className="mt-2 text-gray-500">Shop QR code</p>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
