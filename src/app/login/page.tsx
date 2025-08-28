@@ -6,6 +6,7 @@ import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import type { ConfirmationResult } from "firebase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,7 +15,9 @@ export default function LoginPage() {
   const { user, loading } = useAuth();
 
   const [phoneNumber, setPhoneNumber] = useState("+33757445666");
-  const [confirmation, setConfirmation] = useState<any>(null);
+  const [confirmation, setConfirmation] = useState<ConfirmationResult | null>(
+    null
+  );
   const [code, setCode] = useState("123456");
 
   // Disable reCAPTCHA in development
@@ -39,6 +42,7 @@ export default function LoginPage() {
   };
 
   const verifyCode = async () => {
+    if (!confirmation) return;
     const result = await confirmation.confirm(code);
     const uid = result.user.uid;
 

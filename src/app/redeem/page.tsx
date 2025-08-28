@@ -11,6 +11,7 @@ import {
   User,
 } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import type { ConfirmationResult } from "firebase/auth";
 
 export default function RedeemPage() {
   const params = useSearchParams();
@@ -21,7 +22,8 @@ export default function RedeemPage() {
   const [userPhone, setUserPhone] = useState<string | null>(null);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otpCode, setOtpCode] = useState("");
-  const [confirmationResult, setConfirmationResult] = useState<any>(null);
+  const [confirmationResult, setConfirmationResult] =
+    useState<ConfirmationResult | null>(null);
   const [points, setPoints] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
