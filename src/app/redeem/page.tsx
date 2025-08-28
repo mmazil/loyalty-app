@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import {
@@ -13,7 +13,9 @@ import {
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import type { ConfirmationResult } from "firebase/auth";
 
-export default function RedeemPage() {
+export const dynamic = "force-dynamic"; // 🚫 disable prerendering
+
+function RedeemContent() {
   const params = useSearchParams();
   const userId = params.get("userId") || params.get("userID");
   const shopId = params.get("shopId");
@@ -221,5 +223,13 @@ export default function RedeemPage() {
         Logout
       </button> */}
     </div>
+  );
+}
+
+export default function RedeemPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RedeemContent />
+    </Suspense>
   );
 }

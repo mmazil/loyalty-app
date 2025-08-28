@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { signOut } from "firebase/auth";
@@ -8,7 +8,9 @@ import { auth, db } from "@/lib/firebase";
 import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import QRCode from "react-qr-code";
 
-export default function CoffeePage() {
+export const dynamic = "force-dynamic"; // 🚫 disable prerendering
+
+function ShopContent() {
   const params = useSearchParams();
   const { user, loading } = useAuth();
   const shopId = params.get("shopId");
@@ -110,5 +112,13 @@ export default function CoffeePage() {
         Logout
       </button> */}
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ShopContent />
+    </Suspense>
   );
 }
