@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
@@ -8,7 +8,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import type { ConfirmationResult } from "firebase/auth";
 
-export default function LoginPage() {
+export const dynamic = "force-dynamic"; // 🚫 disable prerendering
+
+function LoginContent() {
   const router = useRouter();
   const params = useSearchParams();
   const shopId = params.get("shopId");
@@ -120,5 +122,13 @@ export default function LoginPage() {
         <div id="recaptcha-container"></div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
